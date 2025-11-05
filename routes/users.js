@@ -128,6 +128,13 @@ module.exports = function(router) {
                 });
 
             } catch (err) {
+                console.log(err.name)
+                if (err.name === 'CastError') {
+                return res.status(404).json({
+                    message: "User not found.",
+                    data: []
+                });
+            }
                 res.status(500).json({
                     message: "Server error: " + err.message,
                     data: []
@@ -187,6 +194,12 @@ module.exports = function(router) {
                 });
 
             } catch (err) {
+                if (err.name === 'CastError') {
+                return res.status(404).json({
+                    message: "User not found.",
+                    data: []
+                });
+            }
                 res.status(500).json({
                     message: "Server error: " + err.message,
                     data: []
@@ -277,7 +290,7 @@ module.exports = function(router) {
                 const deletedUser = await User.findByIdAndDelete(req.params.id);
 
                 if (!deletedUser) {
-                    return res.status(44).json({
+                    return res.status(404).json({
                         message: "User not found.",
                         data: []
                     });
